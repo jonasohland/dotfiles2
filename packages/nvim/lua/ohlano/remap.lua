@@ -1,12 +1,12 @@
 vim.g.mapleader = " "
 
 local function numbers()
-	vim.cmd.set("number")
-	vim.cmd.set("norelativenumber")
+  vim.cmd.set("number")
+  vim.cmd.set("norelativenumber")
 end
 
 local function relativenumbers()
-	vim.cmd.set("relativenumber")
+  vim.cmd.set("relativenumber")
 end
 
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
