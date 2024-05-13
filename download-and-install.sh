@@ -20,7 +20,11 @@ if ! [[ -d "${dotfiles_repo}" ]]; then
   echo "bootstrapping dotfiles repository"
   mkdir -p "$HOME/src"
 
-  if ! git clone --branch main git@github.com:jonasohland/dotfiles2.git "${dotfiles_repo}"; then exit 1; fi
+  if [[ "${USER}" = "ohlano" ]]; then
+    if ! git clone --branch main git@github.com:jonasohland/dotfiles2.git "${dotfiles_repo}"; then exit 1; fi
+  else
+    if ! git clone --branch main https://github.com/jonasohland/dotfiles2.git "${dotfiles_repo}"; then exit 1; fi
+  fi
 fi
 
 exec bash "${dotfiles_repo}/install.sh"
