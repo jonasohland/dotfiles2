@@ -22,9 +22,13 @@ local plugins = {
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = {
-      theme = "catppuccin",
-    },
+    config = function()
+      require("lualine").setup({
+        options = {
+          theme = "horizon",
+        },
+      })
+    end,
   },
   {
     "lewis6991/gitsigns.nvim",
