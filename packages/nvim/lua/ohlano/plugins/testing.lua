@@ -6,7 +6,7 @@ local neotest = {
     "nvim-lua/plenary.nvim",
     "antoinemadec/FixCursorHold.nvim",
     "nvim-treesitter/nvim-treesitter",
-    "nvim-neotest/neotest-go",
+    "fredrikaverpil/neotest-golang",
     "rouge8/neotest-rust",
   },
   config = function(_, _)
@@ -17,8 +17,8 @@ local neotest = {
         require("neotest-rust")({
           args = { "--no-capture" },
         }),
-        require("neotest-go")({
-          args = { "-count=1", "-timeout=60s" },
+        require("neotest-golang")({
+          go_test_args = { "-v", "-race", "-count=1", "-timeout=25s" },
         }),
       },
     })
