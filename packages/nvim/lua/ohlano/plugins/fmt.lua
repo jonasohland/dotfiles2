@@ -22,6 +22,7 @@ local conform = {
       hcl = { "hcl" },
       go = { "gofmt" },
       yaml = { "yamlfmt" },
+      proto = { "buf" },
     },
     -- Set up format-on-save
     -- format_on_save = { timeout_ms = 500, lsp_fallback = false },
