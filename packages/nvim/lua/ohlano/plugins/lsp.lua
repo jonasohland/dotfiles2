@@ -140,6 +140,7 @@ local mason_lspconfig = {
             vim.keymap.set("n", "gq", vim.diagnostic.open_float, { buffer = bufnr })
             vim.keymap.set("n", "gh", vim.lsp.buf.hover, { buffer = bufnr })
             vim.keymap.set("n", "ge", vim.diagnostic.goto_next, { buffer = bufnr })
+            vim.keymap.set("n", "gE", vim.diagnostic.goto_prev, { buffer = bufnr })
             vim.keymap.set("n", "gr", vim.diagnostic.goto_prev, { buffer = bufnr })
           end,
         })
@@ -165,8 +166,25 @@ local code_actions_preview = {
   end,
 }
 
+local copilot = {
+  "zbirenbaum/copilot.lua",
+  event = "InsertEnter",
+  config = function()
+    require("copilot").setup({
+      panel = {
+        enabled = true,
+        auto_refresh = true,
+        layout = {
+          position = "right",
+        },
+      },
+    })
+  end,
+}
+
 return {
   mason,
   lspconfig,
   code_actions_preview,
+  copilot,
 }

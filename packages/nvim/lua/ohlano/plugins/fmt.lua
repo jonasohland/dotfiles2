@@ -23,6 +23,7 @@ local conform = {
       go = { "gofmt" },
       yaml = { "yamlfmt" },
       proto = { "buf" },
+      toml = { "taplo" },
     },
     -- Set up format-on-save
     -- format_on_save = { timeout_ms = 500, lsp_fallback = false },

@@ -20,17 +20,6 @@ local plugins = {
     priority = 100000,
   },
   {
-    "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("lualine").setup({
-        options = {
-          theme = "horizon",
-        },
-      })
-    end,
-  },
-  {
     "lewis6991/gitsigns.nvim",
     event = "BufEnter",
     opts = {},
@@ -45,6 +34,7 @@ local plugins = {
       { "<leader>pf", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
       { "<leader>ps", "<cmd>Telescope git_files<cr>", desc = "Find files in git tree" },
       { "<leader>pr", "<cmd>Telescope live_grep<cr>", desc = "Search in files with live preview" },
+      { "<leader>po", "<cmd>Telescope buffers<cr>", desc = "Search in open buffers" },
     },
   },
   {
