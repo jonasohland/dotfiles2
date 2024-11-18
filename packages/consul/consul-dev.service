@@ -1,0 +1,9 @@
+[Unit]
+Description=Consul Agent for Development
+
+[Service]
+ExecStartPre=mkdir -p "%h/.local/state/consul"
+ExecStart=consul agent -bind 127.0.0.1 -data-dir "%h/.local/state/consul" -server -bootstrap -ui -log-level DEBUG
+
+[Install]
+WantedBy=default.target

@@ -27,7 +27,10 @@ local plugins = {
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
-      { "nvim-lua/plenary.nvim" },
+      {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons",
+      },
     },
     keys = {
       { "<leader>/", false },

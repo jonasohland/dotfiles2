@@ -1,0 +1,16 @@
+[Unit]
+Description=Setup a secure tunnel to %I
+After=network.target
+
+[Service]
+Environment="BIND_ADDRESS=127.0.0.1"
+Environment="REMOTE_ADDRESS=127.0.0.1"
+EnvironmentFile=%h/.config/ssh-tunnel/%I.conf
+ExecStart=/usr/bin/ssh -NT -o ServerAliveInterval=10 -o ServerAliveCountMax=3 -o ExitOnForwardFailure=yes -o ConnectTimeout=2 -o ConnectionAttempts=1 -L ${BIND_ADDRESS}:${BIND_PORT}:${REMOTE_ADDRESS}:${REMOTE_PORT} ${TARGET}
+
+# Restart every >2 seconds to avoid StartLimitInterval failure
+RestartSec=5
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
