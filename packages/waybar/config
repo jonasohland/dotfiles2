@@ -30,7 +30,8 @@
         "temperature",
         "tray",
         "clock#date",
-        "clock#time"
+        "clock#time",
+        "custom/audio-out"
     ],
 
 
@@ -88,29 +89,26 @@
         }
     },
 
+    "hyprland/workspaces": {
+      "format": "{id} > {windows}",
+      "format-window-separator": " ",
+      "window-rewrite-default": "",
+      "window-rewrite": {
+          "title<.*youtube.*>": "",
+          "title<.*Microsoft Teams.*>": "",
+          "title<Apple Music.*>": "",
+          "class<firefox>": "",
+          "class<Alacritty>": "",
+          "class<Google-chrome>": ""
+      },
+    },
+
     "network": {
         "interval": 5,
         "format-ethernet": "  {ifname}: {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits}", // Icon: ethernet
         "format-disconnected": "⚠  Disconnected",
         "tooltip-format": "{ifname}: {ipaddr}"
     },
-
-    //"pulseaudio": {
-    //    //"scroll-step": 1,
-    //    "format": "{icon}  {volume}%",
-    //    "format-bluetooth": "{icon}  {volume}%",
-    //    "format-muted": "",
-    //    "format-icons": {
-    //        "headphones": "",
-    //        "handsfree": "",
-    //        "headset": "",
-    //        "phone": "",
-    //        "portable": "",
-    //        "car": "",
-    //        "default": ["", ""]
-    //    },
-    //    "on-click": "pavucontrol"
-    //},
 
     "temperature": {
       "critical-threshold": 80,
@@ -129,6 +127,12 @@
     "tray": {
         "icon-size": 21,
         "spacing": 10
+    },
+
+    "custom/audio-out": {
+      "exec": "~/.local/bin/get-audio-output-icon",
+      "restart-interval": 5,
+      "format": " {}  "
     }
 
 }
