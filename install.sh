@@ -1,5 +1,18 @@
 #! /bin/bash
 
+case "$1" in
+uninstall)
+  action=uninstall
+  ;;
+install)
+  action=install
+  ;;
+*)
+  echo "usage: $0 { install | uninstall }"
+  exit 1
+  ;;
+esac
+
 script_dir=$(cd -- "$(dirname -- "$(readlink -f "${BASH_SOURCE[0]}")")" &>/dev/null && pwd)
 function is_dry_run() {
   [[ "${DRY_RUN}" = 1 ]]
@@ -20,8 +33,6 @@ function install_package() {
     fi
   fi
 
-  echo "==> stowing package ${package_name}"
-
   stow_args=()
   stow_args+=("-t" "${target}")
   stow_args+=("-d" "$(dirname "${package}")")
@@ -30,7 +41,15 @@ function install_package() {
     stow_args+=("-v1" "-n")
   fi
 
-  stow_args+=("-R" "${package_name}")
+  if [[ "$action" = "install" ]]; then
+    echo "==> stowing package ${package_name}"
+    stow_args+=("-R")
+  else
+    echo "==> unstowing package ${package_name}"
+    stow_args+=("-D")
+  fi
+
+  stow_args+=("${package_name}")
 
   # create the target directory if it does not already exists
   if is_dry_run; then
@@ -39,7 +58,7 @@ function install_package() {
     mkdir -p "${target}"
   fi
 
-  stow --ignore _target --override=".*" "${stow_args[@]}" 2> >(sed -E "s@LINK: (.*)@LINK: ${target}/\1@g" | grep -v "simulation mode" >&2)
+  stow --ignore _target "${stow_args[@]}" 2> >(sed -E "s@LINK: (.*)@LINK: ${target}/\1@g" | grep -v "simulation mode" >&2)
 }
 
 function install_all_packages() {
