@@ -1,0 +1,7 @@
+[includeIf "gitdir:~/src/riedel/"]
+    path = ~/src/riedel/.gitconfig
+[includeIf "gitdir:~/src/private/"]
+    path = ~/src/private/.gitconfig
+[init]
+	defaultBranchName = main
+	defaultBranch = main
