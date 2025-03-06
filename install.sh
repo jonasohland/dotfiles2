@@ -58,7 +58,7 @@ function install_package() {
     mkdir -p "${target}"
   fi
 
-  stow --ignore _target "${stow_args[@]}" 2> >(sed -E "s@LINK: (.*)@LINK: ${target}/\1@g" | grep -v "simulation mode" >&2)
+  stow --ignore _target --ignore _host "${stow_args[@]}" 2> >(sed -E "s@LINK: (.*)@LINK: ${target}/\1@g" | grep -v "simulation mode" >&2)
 }
 
 function install_all_packages() {
