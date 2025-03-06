@@ -11,6 +11,15 @@ function install_package() {
   target="$(envsubst <"${package}/_target")"
   package_name="$(basename "${package}")"
 
+  if [[ -f "${package}/_host" ]]; then
+    target_host="$(<"${package}/_host")"
+
+    if [[ "${target_host}" != "$(</etc/hostname)" ]]; then
+      echo "==> skipping package ${package_name}"
+      return
+    fi
+  fi
+
   echo "==> stowing package ${package_name}"
 
   stow_args=()
@@ -30,7 +39,7 @@ function install_package() {
     mkdir -p "${target}"
   fi
 
-  stow --ignore _target "${stow_args[@]}" 2> >(sed -E "s@LINK: (.*)@LINK: ${target}/\1@g" | grep -v "simulation mode" >&2)
+  stow --ignore _target --override=".*" "${stow_args[@]}" 2> >(sed -E "s@LINK: (.*)@LINK: ${target}/\1@g" | grep -v "simulation mode" >&2)
 }
 
 function install_all_packages() {
