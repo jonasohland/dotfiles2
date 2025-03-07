@@ -33,9 +33,9 @@
         "temperature",
         "tray",
         "battery",
+	"custom/pipewire",
         "clock#date",
         "clock#time",
-        "custom/audio-out"
     ],
 
 
@@ -132,6 +132,18 @@
     "tray": {
         "icon-size": 21,
         "spacing": 10
+    },
+
+    "custom/pipewire": {
+        "exec": "pw-volume status",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{icon}  {percentage}%",
+        "format-icons": {
+	    "mute": "",
+	    "default": ["󰕿", "󰖀", "󰕾"]
+	 }
     },
 
     // "custom/audio-out": {
