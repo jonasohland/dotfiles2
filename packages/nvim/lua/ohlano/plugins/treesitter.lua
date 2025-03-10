@@ -63,6 +63,7 @@ local treesitter = {
         "sql",
         "vue",
         "jsonc",
+        "hyprlang",
       },
     })
   end,

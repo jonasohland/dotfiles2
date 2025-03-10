@@ -3,6 +3,7 @@ local neotest = {
   event = "VeryLazy",
   dependencies = {
     "vhyrro/luarocks.nvim",
+    "nvim-neotest/nvim-nio",
     "nvim-lua/plenary.nvim",
     "antoinemadec/FixCursorHold.nvim",
     "nvim-treesitter/nvim-treesitter",
