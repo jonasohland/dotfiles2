@@ -13,5 +13,15 @@ wd="$(mktemp -d)"
 echo "downloading neovim from $download_url"
 curl -#L -o "${wd}/nvim.tar.gz" "${download_url}"
 
-sudo rm -rf "/opt/nvim"
-sudo tar -C "/opt" -xf "${wd}/nvim.tar.gz"
+rm -rf "${HOME}/.local/share/nvim"
+mkdir -vp "${HOME}/.local/share/nvim"
+tar -C "${HOME}/.local/share/nvim" -xf "${wd}/nvim.tar.gz"
+rm "${wd}/nvim.tar.gz"
+
+if [[ ! -f "${HOME}/.bashrc" ]]; then
+  touch "${HOME}/.bashrc"
+fi
+
+if ! grep -q -F 'PATH="${PATH}:${HOME}/.local/share/nvim/nvim-linux64/bin"' "${HOME}/.bashrc"; then
+  echo 'PATH="${PATH}:${HOME}/.local/share/nvim/nvim-linux64/bin"' >>"${HOME}/.bashrc"
+fi

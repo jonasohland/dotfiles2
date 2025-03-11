@@ -166,25 +166,25 @@ local code_actions_preview = {
   end,
 }
 
-local copilot = {
-  "zbirenbaum/copilot.lua",
-  event = "InsertEnter",
-  config = function()
-    require("copilot").setup({
-      panel = {
-        enabled = true,
-        auto_refresh = true,
-        layout = {
-          position = "right",
-        },
-      },
-    })
-  end,
-}
+-- local copilot = {
+--   "zbirenbaum/copilot.lua",
+--   event = "InsertEnter",
+--   config = function()
+--     require("copilot").setup({
+--       panel = {
+--         enabled = true,
+--         auto_refresh = true,
+--         layout = {
+--           position = "right",
+--         },
+--       },
+--     })
+--   end,
+-- }
 
 return {
   mason,
   lspconfig,
   code_actions_preview,
-  copilot,
+  --  copilot,
 }

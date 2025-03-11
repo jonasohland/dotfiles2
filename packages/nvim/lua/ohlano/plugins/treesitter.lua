@@ -55,7 +55,6 @@ local treesitter = {
         "cuda",
         "json",
         "http",
-        "latex",
         "zig",
         "meson",
         "cmake",
