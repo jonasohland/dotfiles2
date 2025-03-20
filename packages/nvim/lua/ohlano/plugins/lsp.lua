@@ -157,6 +157,12 @@ local lspconfig = {
     neodev,
     neoconf,
   },
+  config = function()
+    local lspconfig = require("lspconfig")
+    lspconfig.helm_ls.setup({
+      settings = {},
+    })
+  end,
 }
 
 local code_actions_preview = {
@@ -164,6 +170,11 @@ local code_actions_preview = {
   config = function(_, _)
     vim.keymap.set({ "v", "n" }, "gf", require("actions-preview").code_actions)
   end,
+}
+
+local vim_helm = {
+  "qvalentin/helm-ls.nvim",
+  ft = "helm",
 }
 
 -- local copilot = {
@@ -186,5 +197,6 @@ return {
   mason,
   lspconfig,
   code_actions_preview,
+  vim_helm,
   --  copilot,
 }
