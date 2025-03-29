@@ -1,0 +1,5 @@
+#! /bin/bash
+
+status="$(upower -i /org/freedesktop/UPower/devices/line_power_AC | sed -nr 's/^.*online:\s*([a-z]*)$/\1/p')"
+
+[[ "$status" = "yes" ]]
