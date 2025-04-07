@@ -3,6 +3,15 @@ local treesitter = {
   build = ":TSUpdate",
   config = function()
     local configs = require("nvim-treesitter.configs")
+    local parsers = require("nvim-treesitter.parsers").get_parser_configs()
+    parsers.vortex = {
+      install_info = {
+        url = "https://github.com/jonasohland/tree-sitter-vortex",
+        files = { "src/parser.c" },
+        branch = "main",
+      },
+      filetype = { "vortex" },
+    }
     configs.setup({
       highlight = {
         enable = true,
@@ -63,6 +72,7 @@ local treesitter = {
         "vue",
         "jsonc",
         "hyprlang",
+        "vortex",
       },
     })
   end,
