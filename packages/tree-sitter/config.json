@@ -1,0 +1,63 @@
+{
+  "parser-directories": [
+    "/home/ohlano/src/private"
+  ],
+  "theme": {
+    "punctuation.bracket": 239,
+    "module": 136,
+    "punctuation.delimiter": 239,
+    "embedded": null,
+    "constant": 94,
+    "function": 26,
+    "property": 124,
+    "constructor": 136,
+    "punctuation.special": 239,
+    "operator": {
+      "color": 239,
+      "bold": true
+    },
+    "punctuation": 239,
+    "string": 28,
+    "string.special": 30,
+    "variable": 252,
+    "function.builtin": {
+      "color": 26,
+      "bold": true
+    },
+    "tag": 18,
+    "keyword": 56,
+    "variable.builtin": {
+      "color": 252,
+      "bold": true
+    },
+    "comment": {
+      "color": 245,
+      "italic": true
+    },
+    "constant.builtin": {
+      "bold": true,
+      "color": 94
+    },
+    "property.builtin": {
+      "bold": true,
+      "color": 124
+    },
+    "number": {
+      "bold": true,
+      "color": 94
+    },
+    "type": 23,
+    "type.builtin": {
+      "color": 23,
+      "bold": true
+    },
+    "attribute": {
+      "color": 124,
+      "italic": true
+    },
+    "variable.parameter": {
+      "underline": true,
+      "color": 252
+    }
+  }
+}
