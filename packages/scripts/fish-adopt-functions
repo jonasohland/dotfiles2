@@ -1,0 +1,26 @@
+#! /bin/bash
+
+script_dir=$(cd -- "$(dirname -- "$(readlink -f "${BASH_SOURCE[0]}")")" &>/dev/null && pwd)
+dotfiles_dir="$(realpath "${script_dir}/../..")"
+functions_dir="${dotfiles_dir}/packages/fish-functions"
+
+adoped=0
+
+for func in "${HOME}/.config/fish/functions/"*; do
+  funcname="$(basename "${func}" ".fish")"
+  if [[ -L "${func}" ]] ||
+    [[ "${funcname}" == _fzf* ]] ||
+    [[ "${funcname}" == fzf_* ]] ||
+    [[ "${funcname}" == "fisher" ]]; then
+    continue
+  fi
+
+  function_file_name="$(basename "${func}")"
+  mv -v "${func}" "${functions_dir}/${function_file_name}"
+
+  adoped=1
+done
+
+if [[ "${adoped}" == "1" ]]; then
+  ${dotfiles_dir}/install.sh install fish-functions
+fi

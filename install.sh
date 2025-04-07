@@ -13,6 +13,8 @@ install)
   ;;
 esac
 
+target_package="${2}"
+
 script_dir=$(cd -- "$(dirname -- "$(readlink -f "${BASH_SOURCE[0]}")")" &>/dev/null && pwd)
 function is_dry_run() {
   [[ "${DRY_RUN}" = 1 ]]
@@ -63,6 +65,9 @@ function install_package() {
 
 function install_all_packages() {
   for pkg in "${script_dir}/packages/"*; do
+    if [[ -n "${target_package}" ]] && [[ "$(basename "${pkg}")" != "${target_package}" ]]; then
+      continue
+    fi
     install_package "$pkg"
   done
 }
