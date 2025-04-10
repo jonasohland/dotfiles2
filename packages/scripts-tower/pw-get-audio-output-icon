@@ -1,0 +1,9 @@
+#! /bin/bash
+
+output_name="$(wpctl inspect @DEFAULT_AUDIO_SINK@ | sed -nr 's/^\s*\*? node.name = "([a-zA-Z\-]*)".*$/\1/p')"
+
+case "${output_name}" in
+speakers-loopback-capture) echo "" ;;
+headphones-loopback-capture) echo "" ;;
+*) echo "" ;;
+esac

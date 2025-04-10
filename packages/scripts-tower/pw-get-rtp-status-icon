@@ -1,0 +1,9 @@
+#! /bin/bash
+
+stream_state="$(pw-dump | jq -r '.[] | select(.info.props."node.name" == "rtp-rx-stream") | .info.state')"
+
+if [[ "${stream_state}" == "running" ]]; then
+  echo 🟢
+else
+  echo ⚪
+fi

@@ -1,0 +1,4 @@
+#! /bin/bash
+
+echo "setting default output to speakers"
+wpctl set-default "$(pw-dump | jq '.[] | select(.info.props."node.name" == "speakers-loopback-capture") | .id')"

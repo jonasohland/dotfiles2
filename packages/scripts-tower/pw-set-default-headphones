@@ -1,0 +1,4 @@
+#! /bin/bash
+
+echo "setting default output to headphones"
+wpctl set-default "$(pw-dump | jq '.[] | select(.info.props."node.name" == "headphones-loopback-capture") | .id')"
