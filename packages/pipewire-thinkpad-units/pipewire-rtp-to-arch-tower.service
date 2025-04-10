@@ -1,0 +1,13 @@
+[Unit]
+Description=RTP Sender to jonas-tower-arch
+After=pipewire.service
+BindsTo=pipewire.service
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/pipewire-rtp-to-arch-tower
+Restart=on-failure
+Slice=session.slice
+
+[Install]
+WantedBy=default.target
