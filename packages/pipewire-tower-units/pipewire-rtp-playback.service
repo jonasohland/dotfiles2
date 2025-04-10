@@ -1,0 +1,13 @@
+[Unit]
+Description=RTP Playback
+After=pipewire.service
+BindsTo=pipewire.service
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/pipewire-rtp-playback
+Restart=on-failure
+Slice=session.slice
+
+[Install]
+WantedBy=default.target
