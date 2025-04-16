@@ -5,6 +5,7 @@ BindsTo=pipewire.service
 
 [Service]
 Type=simple
+Environment=PIPEWIRE_DEBUG=mod.rtp-source:I
 ExecStart=%h/.local/bin/pipewire-rtp-playback
 Restart=on-failure
 Slice=session.slice

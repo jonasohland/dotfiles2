@@ -1,0 +1,14 @@
+monitor.alsa.rules = [
+  {
+    matches = [
+      {
+        node.name = "MADIface Pro (79250782)"
+      }
+    ]
+    actions = {
+      update-props = {
+        device.profile = "pro-audio"
+      }
+    }
+  }
+]
