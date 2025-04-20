@@ -23,6 +23,7 @@
   "modules-center": [],
   "modules-right": [
     "network",
+    "bluetooth",
     "memory",
     "cpu",
     "temperature",
@@ -100,6 +101,19 @@
     "format-disconnected": "⚠  Disconnected",
     "tooltip-format": "{ifname}: {ipaddr}"
   },
+  "bluetooth": {
+    // "controller": "controller1", // specify the alias of the controller if there are more than 1 on the system
+    // "format": "󰂯 {status}",
+    // format-* handles every state, so default format is not necessary.
+    "format-on": "󰂯",
+    "format-off": "󰂲",
+    "format-disabled": "", // an empty format will hide the module
+    "format-connected": "󰂱 {num_connections}",
+    // "tooltip-format": "{controller_alias}\t{controller_address}",
+    // "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+  },
   "temperature": {
     "critical-threshold": 80,
     "interval": 5,
@@ -118,11 +132,10 @@
     "spacing": 10
   },
   "custom/pipewire": {
-    "exec": "pw-volume status",
-    "return-type": "json",
+    "exec": "wpctl get-volume @DEFAULT_AUDIO_SINK@",
     "interval": "once",
     "signal": 8,
-    "format": "{icon}  {percentage}%",
+    "format": "{}",
     "format-icons": {
       "mute": "",
       "default": [
@@ -131,7 +144,7 @@
         "󰕾"
       ]
     }
-  },
+  }
   // "custom/audio-out": {
   //   "exec": "~/.local/bin/get-audio-output-icon",
   //   "restart-interval": 5,

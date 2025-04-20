@@ -1,0 +1,9 @@
+#! /bin/bash
+
+bluetoothctl power off
+reload-btintel-driver || exit 1
+sleep 2s
+rfkill unblock bluetooth
+bluetoothctl power on
+
+notify-send -a Bluetooth -u normal "btintel_pcie" "driver reloaded"

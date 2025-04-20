@@ -1,0 +1,20 @@
+#! /bin/bash
+
+NL='
+'
+
+options="120 Hz${NL}60 Hz"
+
+if ! selection="$(rofi -dmenu <<<"${options}")"; then
+  echo "no selection"
+  exit
+fi
+
+case "${selection}" in
+120*)
+  displayctl rate eDP-1 120
+  ;;
+60*)
+  displayctl rate eDP-1 60
+  ;;
+esac

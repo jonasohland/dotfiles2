@@ -5,6 +5,7 @@ BindsTo=pipewire.service
 
 [Service]
 Type=simple
+Environment=PIPEWIRE_DEBUG=3
 ExecStart=%h/.local/bin/pipewire-rtp-to-arch-tower
 Restart=on-failure
 Slice=session.slice

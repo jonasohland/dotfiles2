@@ -1,0 +1,7 @@
+#! /bin/bash
+
+echo unload btintel_pcie
+sudo rmmod btintel_pcie
+
+echo loading btintel_pcie
+sudo modprobe btintel_pcie

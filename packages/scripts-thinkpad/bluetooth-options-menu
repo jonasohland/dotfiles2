@@ -1,0 +1,84 @@
+#! /bin/bash
+
+NL='
+'
+
+devices="$(bluetoothctl devices)"
+device_names=()
+declare -A device_map
+
+power_state=$(bluetoothctl show | sed -nr 's/\s*PowerState: ([a-z]+)/\1/p')
+
+echo "power_state: ${power_state}"
+
+function bt_connect() {
+  device=${1}
+  device_addr="${device_map["${dev}"]}"
+
+  if [[ "${power_state}" != "on" ]]; then
+    bt_power_on
+  fi
+
+  echo "connecting to: ${device}, addr: ${device_addr}"
+
+  if bluetoothctl connect "${device_addr}"; then
+    notify-send -a bluetooth -u normal "Bluetooth" "Connected to: ${device}"
+  else
+    notify-send -a bluetooth -u warning "Bluetooth" "Connection to ${device} failed"
+  fi
+}
+
+function bt_power_off() {
+  if [[ "${power_state}" == "off" ]]; then
+    echo nothing to do
+    return
+  fi
+
+  bluetoothctl power off
+}
+
+function bt_power_on() {
+  if [[ "${power_state}" == "on" ]]; then
+    echo nothing to do
+    return
+  fi
+
+  if ! bluetoothctl power on; then
+    notify-send -a bluetooth -n warning "Bluetooth" "Failed to power on controller"
+  fi
+}
+
+while read device_line; do
+  dev_name="$(cut -d' ' -f3 <<<"${device_line}")"
+  dev_addr="$(cut -d' ' -f2 <<<"${device_line}")"
+  device_map["${dev_name}"]="${dev_addr}"
+done <<<"${devices}"
+
+dmenu_input=""
+
+for dev in "${!device_map[@]}"; do
+  echo "found device name: ${dev} addr: ${device_map[${dev}]}"
+  dmenu_input="Connect: ${dev}${NL}${dmenu_input}"
+done
+
+dmenu_input="${dmenu_input}---${NL}Power off${NL}Power on${NL}Reload driver"
+
+if ! result=$(rofi -dmenu <<<"${dmenu_input}"); then
+  echo "no selection"
+  exit
+fi
+
+case "${result}" in
+"Power on")
+  bt_power_on
+  ;;
+"Power off")
+  bt_power_off
+  ;;
+"Reload driver")
+  reload-bluetooth
+  ;;
+"Connect:"*)
+  bt_connect "$(sed -nr 's/^Connect: (.*)$/\1/p' <<<"${result}")"
+  ;;
+esac
