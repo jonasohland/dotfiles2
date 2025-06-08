@@ -10,5 +10,6 @@ test -d "$HOME/vcpkg" && set -x VCPKG_ROOT "$HOME/vcpkg"
 
 set -x GPG_TTY (tty)
 set -x SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/ssh-agent.socket"
+set -x VCPKG_DISABLE_METRICS 1
 
 fish_default_key_bindings
