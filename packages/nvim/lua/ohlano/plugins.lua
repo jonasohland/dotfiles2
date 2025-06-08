@@ -88,5 +88,6 @@ vim.list_extend(plugins, require("ohlano.plugins.lint"))
 vim.list_extend(plugins, require("ohlano.plugins.fmt"))
 vim.list_extend(plugins, require("ohlano.plugins.testing"))
 vim.list_extend(plugins, require("ohlano.plugins.treesitter"))
+vim.list_extend(plugins, require("ohlano.plugins.dap"))
 
 require("lazy").setup(plugins, {})
