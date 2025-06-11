@@ -46,15 +46,16 @@ if [[ "${#pkg_missing[@]}" -gt 0 ]]; then
   case "${yn}" in
   [Yy] | '')
     case "$pkgmgr" in
-    apt) if ! sudo apt-get install -y "${pkg_missing}"; then exit 1; fi ;;
-    pacman) if ! sudo pacman -Syu "${pkg_missing}"; then exit 1; fi ;;
+    apt) if ! sudo apt-get install -y "${pkg_missing[@]}"; then exit 1; fi ;;
+    pacman) if ! sudo pacman -Syu "${pkg_missing[@]}"; then exit 1; fi ;;
     esac
     ;;
   [Nn]) exit 1 ;;
-  *) echo "please answer 'y' or 'n'" ;;
+  *)
+    echo "please answer 'y' or 'n'"
+    exit 1
+    ;;
   esac
-
-  exit 1
 fi
 
 dotfiles_repo="$HOME/src/dotfiles"
