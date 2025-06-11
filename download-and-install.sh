@@ -1,5 +1,29 @@
 #! /bin/bash
 
+function help() {
+  echo "download-and-install.sh [args]"
+  echo "  -h, --help  Show this help"
+  echo "  -y, --yes   Say yes to all prompts"
+}
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+  -y | --yes)
+    yes_to_all=1
+    shift
+    ;;
+  -h | --help)
+    help
+    exit 0
+    shift
+    ;;
+  *)
+    echo "unsupported argument: $1"
+    exit 1
+    ;;
+  esac
+done
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   echo "running on gnu/linux"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -41,21 +65,29 @@ esac
 
 if [[ "${#pkg_missing[@]}" -gt 0 ]]; then
   echo "the following packages are missing and must be installed:" "${pkg_missing[@]}"
-  read -p "install now? [Y/n]:" yn
 
-  case "${yn}" in
-  [Yy] | '')
+  if [[ "${yes_to_all}" = 1 ]]; then
     case "$pkgmgr" in
     apt) if ! sudo apt-get install -y "${pkg_missing[@]}"; then exit 1; fi ;;
     pacman) if ! sudo pacman -Syu "${pkg_missing[@]}"; then exit 1; fi ;;
     esac
-    ;;
-  [Nn]) exit 1 ;;
-  *)
-    echo "please answer 'y' or 'n'"
-    exit 1
-    ;;
-  esac
+  else
+    read -p "install now? [Y/n]:" yn
+
+    case "${yn}" in
+    [Yy] | '')
+      case "$pkgmgr" in
+      apt) if ! sudo apt-get install -y "${pkg_missing[@]}"; then exit 1; fi ;;
+      pacman) if ! sudo pacman -Syu "${pkg_missing[@]}"; then exit 1; fi ;;
+      esac
+      ;;
+    [Nn]) exit 1 ;;
+    *)
+      echo "please answer 'y' or 'n'"
+      exit 1
+      ;;
+    esac
+  fi
 fi
 
 dotfiles_repo="$HOME/src/dotfiles"
@@ -75,18 +107,22 @@ for installer in "${dotfiles_repo}/installers/"*; do
   installer_basename="$(basename "${installer}")"
   installer_name="${installer_basename%.*}"
 
-  read -p "install ${installer_name} now? [Y/n]:" yn
-
-  case "${yn}" in
-  [Yy] | '')
+  if [[ "${yes_to_all}" = 1 ]]; then
     if ! bash "${installer}"; then exit 1; fi
-    ;;
-  [Nn]) exit 1 ;;
-  *)
-    echo "please answer 'y' or 'n'"
-    exit 1
-    ;;
-  esac
+  else
+    read -p "install ${installer_name} now? [Y/n]:" yn
+
+    case "${yn}" in
+    [Yy] | '')
+      if ! bash "${installer}"; then exit 1; fi
+      ;;
+    [Nn]) exit 1 ;;
+    *)
+      echo "please answer 'y' or 'n'"
+      exit 1
+      ;;
+    esac
+  fi
 done
 
 exec bash "${dotfiles_repo}/install.sh" install
