@@ -1,6 +1,6 @@
 #! /bin/bash
 
-neovim_version="0.10.1"
+neovim_version="0.11.2"
 
 if [[ "$OSTYPE" = "linux-gnu" ]]; then
   download_url="https://github.com/neovim/neovim/releases/download/v${neovim_version}/nvim-linux64.tar.gz"
