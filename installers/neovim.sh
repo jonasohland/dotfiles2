@@ -22,6 +22,6 @@ if [[ ! -f "${HOME}/.bashrc" ]]; then
   touch "${HOME}/.bashrc"
 fi
 
-if ! grep -q -F 'PATH="${PATH}:${HOME}/.local/share/nvim/nvim-linux64/bin"' "${HOME}/.bashrc"; then
-  echo 'PATH="${PATH}:${HOME}/.local/share/nvim/nvim-linux64/bin"' >>"${HOME}/.bashrc"
+if ! grep -q -F 'PATH="${PATH}:${HOME}/.local/share/nvim/nvim-linux-x86_64/bin"' "${HOME}/.bashrc"; then
+  echo 'PATH="${PATH}:${HOME}/.local/share/nvim/nvim-linux-x86_64/bin"' >>"${HOME}/.bashrc"
 fi
