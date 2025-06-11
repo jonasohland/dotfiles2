@@ -3,9 +3,9 @@
 neovim_version="0.11.2"
 
 if [[ "$OSTYPE" = "linux-gnu" ]]; then
-  download_url="https://github.com/neovim/neovim/releases/download/v${neovim_version}/nvim-linux64.tar.gz"
+  download_url="https://github.com/neovim/neovim/releases/download/v${neovim_version}/nvim-linux-x86_64.tar.gz"
 else
-  download_url="https://github.com/neovim/neovim/releases/download/v${neovim_version}/nvim-macos.tar.gz"
+  download_url="https://github.com/neovim/neovim/releases/download/v${neovim_version}/nvim-macos-x86_64.tar.gz"
 fi
 
 wd="$(mktemp -d)"
