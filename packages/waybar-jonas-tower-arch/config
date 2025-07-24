@@ -92,7 +92,8 @@
   },
   "network": {
     "interval": 5,
-    "format-ethernet": "  {ifname}: {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits} |", // Icon: ethernet
+    "format-ethernet": "  {ifname} | {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits} |", // Icon: ethernet
+    "format-wifi": "󰖩  {ifname}: {essid} | {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits} |",
     "format-disconnected": "⚠  Disconnected |",
     "tooltip-format": "{ifname}: {ipaddr}"
   },
