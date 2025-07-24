@@ -96,9 +96,9 @@
   },
   "network": {
     "interval": 5,
-    "format-wifi": "   {essid}: {signalStrength}%",
-    "format-ethernet": "  {ifname}: {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits}", // Icon: ethernet
-    "format-disconnected": "⚠  Disconnected",
+    "format-ethernet": "  {ifname} | {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits} |", // Icon: ethernet
+    "format-wifi": "󰖩  {ifname}: {essid} | {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits} |",
+    "format-disconnected": "⚠  Disconnected |",
     "tooltip-format": "{ifname}: {ipaddr}"
   },
   "bluetooth": {
