@@ -63,9 +63,10 @@
     "format-window-separator": " ",
     "window-rewrite-default": "",
     "window-rewrite": {
-      "title<.*youtube.*>": "",
-      "title<.*Microsoft Teams.*>": "",
-      "title<Apple Music.*>": "",
+      "title<YouTube.*>": "",
+      "class<msedge-teams.microsoft.com.*>": "",
+      "class<msedge-music.apple.com.*>": "",
+      "class<Slack>": "",
       "class<firefox>": "",
       "class<Alacritty>": "",
       "class<Google-chrome>": ""

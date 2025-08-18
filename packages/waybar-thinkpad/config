@@ -23,6 +23,7 @@
   "modules-center": [],
   "modules-right": [
     "network",
+    "custom/tailscale",
     "bluetooth",
     "memory",
     "cpu",
@@ -86,18 +87,19 @@
     "format-window-separator": " ",
     "window-rewrite-default": "",
     "window-rewrite": {
-      "title<.*youtube.*>": "",
-      "title<.*Microsoft Teams.*>": "",
-      "title<Apple Music.*>": "",
+      "title<YouTube.*>": "",
+      "class<msedge-teams.microsoft.com.*>": "",
+      "class<msedge-music.apple.com.*>": "",
+      "class<Slack>": "",
       "class<firefox>": "",
       "class<Alacritty>": "",
       "class<Google-chrome>": ""
-    },
+    }
   },
   "network": {
     "interval": 5,
-    "format-ethernet": "  {ifname} | {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits} |", // Icon: ethernet
-    "format-wifi": "󰖩  {ifname}: {essid} | {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits} |",
+    "format-ethernet": "  {ifname} | {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits}", // Icon: ethernet
+    "format-wifi": "󰖩  {ifname}: {essid} | {ipaddr}/{cidr}  {bandwidthUpBits}  {bandwidthDownBits}",
     "format-disconnected": "⚠  Disconnected |",
     "tooltip-format": "{ifname}: {ipaddr}"
   },
@@ -105,8 +107,8 @@
     // "controller": "controller1", // specify the alias of the controller if there are more than 1 on the system
     // "format": "󰂯 {status}",
     // format-* handles every state, so default format is not necessary.
-    "format-on": "󰂯",
-    "format-off": "󰂲",
+    "format-on": " | 󰂯",
+    "format-off": " | 󰂲",
     "format-disabled": "", // an empty format will hide the module
     "format-connected": "󰂱 {num_connections}",
     // "tooltip-format": "{controller_alias}\t{controller_address}",
@@ -144,6 +146,15 @@
         "󰕾"
       ]
     }
+  },
+  "custom/tailscale": {
+    "format": "",
+    "exec": "bash ~/.config/waybar/tailscale-status.sh",
+    "on-click": "sudo tailscale up",
+    "on-double-click": "sudo tailscale down",
+    "interval": 7,
+    "return-type": "json",
+    "tooltip": true
   }
   // "custom/audio-out": {
   //   "exec": "~/.local/bin/get-audio-output-icon",

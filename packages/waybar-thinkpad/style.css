@@ -188,3 +188,11 @@
     border-color: #c9545d;
     color: #c9545d;
 }
+
+#custom-tailscale {
+  color: #eceff4;
+}
+
+#custom-tailscale.disabled {
+  color: #e78284;
+}
