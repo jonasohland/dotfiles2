@@ -1,5 +1,10 @@
 [user]
     email = jonas.ohland@riedel.net
     name = Jonas Ohland (Riedel)
+    signingkey = 4E9ABA5838A82250F5F605F64EBA8A0CE662382A
 [init]
     defaultBranch = main
+[commit]
+    gpgsign = true
+[tag]
+    gpgsign = true

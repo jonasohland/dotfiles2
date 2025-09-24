@@ -1,3 +1,8 @@
 [user]
 	email = jonas.ohland@gmail.com
 	name = Jonas Ohland
+	signingkey = B7D1C5AEFE0E53CB5C49548E700B127B8392E427
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
