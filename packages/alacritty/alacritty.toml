@@ -9,7 +9,7 @@ bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
 size = 12
 
 [colors.primary]
-background = "#1b1b1b"
+background = "#191724"
 
 [terminal]
 shell = "/usr/bin/fish"
