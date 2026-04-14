@@ -1,0 +1,12 @@
+[Unit]
+Description=Jellyfin MPV Shim
+PartOf=graphical-session.target
+Requires=graphical-session.target
+After=graphical-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+ExecStart=/usr/bin/jellyfin-mpv-shim
+
+[Install]
+WantedBy=default.target
