@@ -1,0 +1,10 @@
+[Unit]
+Description=MXL GST Test Source
+
+[Service]
+EnvironmentFile=%h/.config/mxl/flows/%i.conf
+ExecStartPre=/bin/bash -c 'mkdir -vp "${DOMAIN_DIR}"'
+ExecStart=/bin/bash -c '[[ "${FLOW_TYPE}" == "video" ]] && exec mxl-gst-testsrc -d "${DOMAIN_DIR}" -v "${FLOW_DEF}" -g "%i" || exec mxl-gst-testsrc -d "${DOMAIN_DIR}" -a "${FLOW_DEF}" -g "%i"'
+
+[Install]
+WantedBy=default.target

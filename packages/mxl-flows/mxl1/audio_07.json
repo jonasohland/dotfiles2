@@ -1,0 +1,23 @@
+{
+  "$copyright": "SPDX-FileCopyrightText: 2025 Contributors to the Media eXchange Layer project.",
+  "$license": "SPDX-License-Identifier: Apache-2.0",
+  "description": "Test Audio Flow 07",
+  "format": "urn:x-nmos:format:audio",
+  "tags": {
+    "urn:x-nmos:tag:grouphint/v1.0": [
+      "Test Flow 07:audio"
+    ]
+  },
+  "label": "test-audio-flow-07",
+  "version": "1441812152:154331951",
+  "id": "4f929e5b-8b4d-4d6b-a5eb-8c0cfbf0dd2f",
+  "media_type": "audio/float32",
+  "sample_rate": {
+    "numerator": 48000
+  },
+  "channel_count": 2,
+  "bit_depth": 32,
+  "parents": [],
+  "source_id": "4f45c00c-9f44-492b-bb48-3678b324b4ea",
+  "device_id": "e7f02e48-b727-4e96-ab15-eda397d9e7af"
+}

@@ -5,9 +5,14 @@ local neotest = {
     "vhyrro/luarocks.nvim",
     "nvim-neotest/nvim-nio",
     "nvim-lua/plenary.nvim",
-    "antoinemadec/FixCursorHold.nvim",
     "nvim-treesitter/nvim-treesitter",
-    "fredrikaverpil/neotest-golang",
+    {
+      "fredrikaverpil/neotest-golang",
+      version = "*",
+      build = function()
+        vim.system({ "go", "install", "gotest.tools/gotestsum@latest" }):wait()
+      end,
+    },
     "rouge8/neotest-rust",
   },
   config = function(_, _)
@@ -20,6 +25,7 @@ local neotest = {
         }),
         require("neotest-golang")({
           go_test_args = { "-v", "-race", "-count=1", "-timeout=25s" },
+          runner = "gotestsum",
         }),
       },
     })

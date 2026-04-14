@@ -7,7 +7,6 @@ monitor.alsa.rules = [
     ]
     actions = {
       update-props = {
-        device.profile = "pro-audio"
       }
     }
   }

@@ -1,0 +1,43 @@
+{
+  "$copyright": "SPDX-FileCopyrightText: 2025 Contributors to the Media eXchange Layer project.",
+  "$license": "SPDX-License-Identifier: Apache-2.0",
+  "description": "Test Video Flow 07",
+  "id": "ac59a199-4bc1-471f-b7bc-0a1205d27f7d",
+  "tags": {
+    "urn:x-nmos:tag:grouphint/v1.0": [
+      "Test Flow 07:video"
+    ]
+  },
+  "format": "urn:x-nmos:format:video",
+  "label": "test-video-flow-07",
+  "parents": [],
+  "media_type": "video/v210",
+  "grain_rate": {
+    "numerator": 30,
+    "denominator": 1
+  },
+  "frame_width": 1920,
+  "frame_height": 1080,
+  "interlace_mode": "progressive",
+  "colorspace": "BT709",
+  "components": [
+    {
+      "name": "Y",
+      "width": 1920,
+      "height": 1080,
+      "bit_depth": 10
+    },
+    {
+      "name": "Cb",
+      "width": 960,
+      "height": 1080,
+      "bit_depth": 10
+    },
+    {
+      "name": "Cr",
+      "width": 960,
+      "height": 1080,
+      "bit_depth": 10
+    }
+  ]
+}
