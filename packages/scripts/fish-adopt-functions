@@ -13,6 +13,8 @@ for func in "${HOME}/.config/fish/functions/"*; do
   if [[ -L "${func}" ]] ||
     [[ "${funcname}" == _fzf* ]] ||
     [[ "${funcname}" == fzf_* ]] ||
+    [[ "${funcname}" == _nvm* ]] ||
+    [[ "${funcname}" == nvm* ]] ||
     [[ "${funcname}" == "fisher" ]]; then
     continue
   fi
