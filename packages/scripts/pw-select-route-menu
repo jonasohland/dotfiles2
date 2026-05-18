@@ -1,0 +1,55 @@
+#! /bin/bash
+
+direction="${1}"
+
+if [[ "${direction}" != "sink" ]] && [[ "${direction}" != "source" ]]; then
+  echo "direction must be either 'sink' or 'source'"
+  exit 1
+fi
+
+default_sink_id="$(wpctl inspect @DEFAULT_AUDIO_SINK@ | sed -rn 's/^id ([0-9]*).*$/\1/p')"
+default_source_id="$(wpctl inspect @DEFAULT_AUDIO_SOURCE@ | sed -rn 's/^id ([0-9]*).*$/\1/p')"
+
+function get_device_id() {
+  pw-dump "${1}" | jq '.[0].info.props."device.id"'
+}
+
+function get_routes() {
+  local kind=""
+  if [[ "${direction}" = "sink" ]]; then
+    kind="Output"
+  else
+    kind="Input"
+  fi
+
+  pw-dump "${1}" | jq -r ".[0].info.params.EnumRoute[] | select(.direction == \"${kind}\") | .name"
+}
+
+function get_route_entry_index() {
+  pw-dump "${1}" | jq ".[0].info.params.EnumRoute[] | select (.name == \"${2}\") | .index"
+}
+
+function set_route_by_index() {
+  local kind="" 
+  if [[ "${direction}" = "sink" ]]; then
+    kind="@DEFAULT_AUDIO_SINK@"
+  else
+    kind="@DEFAULT_AUDIO_SOURCE@"
+  fi
+
+  wpctl set-route "${kind}" "${1}"
+}
+
+if [[ "${direction}" = "source" ]]; then
+  device_id="$(get_device_id "${default_source_id}")"
+else
+  device_id="$(get_device_id "${default_sink_id}")"
+fi
+
+echo "device_id: ${device_id}"
+
+route_name="$(get_routes "${device_id}" | rofi -dmenu)"
+route_id="$(get_route_entry_index "${device_id}" "${route_name}")"
+
+echo "route_id: ${route_id}"
+set_route_by_index "${route_id}"
