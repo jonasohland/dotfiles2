@@ -22,4 +22,3 @@ local vtsls_config = {
 
 vim.lsp.config("vtsls", vtsls_config)
 vim.lsp.config("vue_ls", {})
-print("after")

@@ -1,0 +1,10 @@
+[Unit]
+Description=Pipewire Input Routing for Scarlett 4i4 interface
+After=pipewire.service
+BindsTo=pipewire.service
+
+[Service]
+ExecStart=%h/.local/bin/pipewire-input-routing
+
+[Install]
+WantedBy=default.target

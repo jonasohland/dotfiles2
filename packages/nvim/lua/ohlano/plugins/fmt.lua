@@ -24,6 +24,7 @@ local conform = {
       yaml = { "yamlfmt" },
       proto = { "buf" },
       toml = { "taplo" },
+      nix = { "nixfmt" },
     },
     -- Set up format-on-save
     -- format_on_save = { timeout_ms = 500, lsp_fallback = false },

@@ -5,7 +5,5 @@ au({ "BufNewFile", "BufRead" }, { pattern = { "*.nomad" }, command = ":set set=h
 vim.filetype.add({
   extension = {
     ["nomad"] = "hcl",
-    ["vx"] = "vortex",
-    ["vortex"] = "vortex",
   },
 })

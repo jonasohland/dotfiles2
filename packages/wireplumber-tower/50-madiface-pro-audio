@@ -2,11 +2,13 @@ monitor.alsa.rules = [
   {
     matches = [
       {
-        node.name = "MADIface Pro (79250782)"
+        device.name = "alsa_card.usb-Focusrite_Scarlett_4i4_4th_Gen_S4Q366K3700949-00"
       }
     ]
     actions = {
       update-props = {
+      	api.alsa.use-acp = true
+      	device.profile   = "pro-audio"
       }
     }
   }
