@@ -5,7 +5,6 @@ local neotest = {
     "vhyrro/luarocks.nvim",
     "nvim-neotest/nvim-nio",
     "nvim-lua/plenary.nvim",
-    "nvim-treesitter/nvim-treesitter",
     {
       "fredrikaverpil/neotest-golang",
       version = "*",
