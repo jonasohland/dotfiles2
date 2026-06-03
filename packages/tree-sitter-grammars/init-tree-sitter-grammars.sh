@@ -63,6 +63,8 @@ GRAMMARS=(
 # extra grammars from the internet
 declare -A EXTRA_GRAMMARS=(
   ["stage_idl"]="git@bitbucket.org:riedelcommunications/tree-sitter-stage-idl.git"
+  ["vortex"]="https://github.com/jonasohland/tree-sitter-vortex.git"
+  ["systemd"]="https://github.com/10fish/tree-sitter-systemd.git"
 )
 
 NVIM_TREESITTER_REPO="nvim-treesitter/nvim-treesitter"
