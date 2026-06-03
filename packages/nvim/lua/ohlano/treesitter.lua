@@ -9,6 +9,7 @@ local filetype_aliases = {
   javascript = { "javascriptreact" },
   tsx = { "typescriptreact" },
   stage_idl = { "idl" },
+  vortex = { "vx" },
 }
 
 -- get languages from .so filenames

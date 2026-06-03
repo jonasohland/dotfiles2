@@ -81,6 +81,28 @@ local plugins = {
       require("rest-nvim").setup()
     end,
   },
+  {
+    "greggh/claude-code.nvim",
+    event = "VeryLazy",
+    requires = {
+      "nvim-lua/plenary.nvim", -- Required for git operations
+    },
+    config = function()
+      require("claude-code").setup({
+        command = "claude",
+        keymaps = {
+          toggle = {
+            normal = "<leader>cc",
+            variants = {
+              continue = "<leader>cC",
+            },
+          },
+          window_navigation = true,
+          scrolling = true,
+        },
+      })
+    end,
+  },
 }
 
 vim.list_extend(plugins, require("ohlano.plugins.lsp"))
