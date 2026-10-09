@@ -1,0 +1,3 @@
+# Disable explicit scanout modifiers: avoids Y-tiled CCS, which roughly doubles
+# i915 gen9 level-0 DDB demand per pipe (see ~/.config/hypr/monitor-bandwidth-limitation.md)
+export AQ_NO_MODIFIERS=1

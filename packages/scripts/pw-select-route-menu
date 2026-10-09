@@ -1,55 +1,213 @@
-#! /bin/bash
+#! /usr/bin/env python
+"""Pick a PipeWire device route (speakers, headphones, HDMI, mic, ...) via dmenu.
 
-direction="${1}"
+usage: pw-select-route-menu [sink|source|all]    (default: all)
 
-if [[ "${direction}" != "sink" ]] && [[ "${direction}" != "source" ]]; then
-  echo "direction must be either 'sink' or 'source'"
-  exit 1
-fi
+A sound card is exposed as one device with several routes. A route is only
+usable when it belongs to the device's active profile, so choosing e.g. HDMI
+may require switching profile first. This script does that, applies the route
+(persisted by WirePlumber) and makes the resulting node the default.
 
-default_sink_id="$(wpctl inspect @DEFAULT_AUDIO_SINK@ | sed -rn 's/^id ([0-9]*).*$/\1/p')"
-default_source_id="$(wpctl inspect @DEFAULT_AUDIO_SOURCE@ | sed -rn 's/^id ([0-9]*).*$/\1/p')"
+The menu command can be overridden with $DMENU (default: "rofi -dmenu -i").
+"""
 
-function get_device_id() {
-  pw-dump "${1}" | jq '.[0].info.props."device.id"'
+import json
+import os
+import shlex
+import subprocess
+import sys
+import time
+
+DIRECTIONS = {
+    'sink': ('Output', 'Audio/Sink'),
+    'source': ('Input', 'Audio/Source'),
 }
 
-function get_routes() {
-  local kind=""
-  if [[ "${direction}" = "sink" ]]; then
-    kind="Output"
-  else
-    kind="Input"
-  fi
 
-  pw-dump "${1}" | jq -r ".[0].info.params.EnumRoute[] | select(.direction == \"${kind}\") | .name"
-}
+def run(*cmd, **kw):
+    return subprocess.run(cmd, check=True, capture_output=True, text=True, **kw).stdout
 
-function get_route_entry_index() {
-  pw-dump "${1}" | jq ".[0].info.params.EnumRoute[] | select (.name == \"${2}\") | .index"
-}
 
-function set_route_by_index() {
-  local kind="" 
-  if [[ "${direction}" = "sink" ]]; then
-    kind="@DEFAULT_AUDIO_SINK@"
-  else
-    kind="@DEFAULT_AUDIO_SOURCE@"
-  fi
+def pw_dump():
+    return json.loads(run('pw-dump'))
 
-  wpctl set-route "${kind}" "${1}"
-}
 
-if [[ "${direction}" = "source" ]]; then
-  device_id="$(get_device_id "${default_source_id}")"
-else
-  device_id="$(get_device_id "${default_sink_id}")"
-fi
+def params(obj, name):
+    return obj.get('info', {}).get('params', {}).get(name, [])
 
-echo "device_id: ${device_id}"
 
-route_name="$(get_routes "${device_id}" | rofi -dmenu)"
-route_id="$(get_route_entry_index "${device_id}" "${route_name}")"
+def profile_devices(profile):
+    """Map node class -> card.profile.device ids, from a profile's `classes`."""
+    classes = profile.get('classes', [])
+    result = {}
+    for entry in classes[1:] if classes and isinstance(classes[0], int) else classes:
+        if not isinstance(entry, list) or len(entry) < 4:
+            continue
+        cls, _, key, devs = entry[:4]
+        if key == 'card.profile.devices':
+            result.setdefault(cls, []).extend(devs)
+    return result
 
-echo "route_id: ${route_id}"
-set_route_by_index "${route_id}"
+
+def profile_parts(name):
+    """'output:a+input:b' -> {'output': 'a', 'input': 'b'}"""
+    parts = {}
+    for part in name.split('+'):
+        kind, _, rest = part.partition(':')
+        parts[kind] = rest
+    return parts
+
+
+def collect(dump, wanted):
+    """All selectable routes of all ALSA/ACP devices, for the given directions."""
+    entries = []
+    for dev in dump:
+        if dev.get('type') != 'PipeWire:Interface:Device':
+            continue
+        props = dev['info']['props']
+        if props.get('media.class') != 'Audio/Device':
+            continue
+        enum_profiles = {p['index']: p for p in params(dev, 'EnumProfile')}
+        cur_profile = (params(dev, 'Profile') or [{}])[0].get('index')
+        active = {(r['direction'], r['index']) for r in params(dev, 'Route')}
+        card = props.get('device.description', props.get('device.name', str(dev['id'])))
+        for route in params(dev, 'EnumRoute'):
+            if route['direction'] not in wanted:
+                continue
+            is_active = (route['direction'], route['index']) in active
+            # unplugged jacks / disconnected HDMI sinks are reported as "no"
+            if route.get('available') == 'no' and not is_active:
+                continue
+            entries.append({
+                'device': dev['id'],
+                'card': card,
+                'route': route,
+                'profiles': enum_profiles,
+                'cur_profile': cur_profile,
+                'active': is_active,
+            })
+    return entries
+
+
+def label(e, with_card, with_dir):
+    r = e['route']
+    text = r['description']
+    if with_card:
+        text = f"{e['card']}: {text}"
+    if with_dir:
+        text = f"{'out' if r['direction'] == 'Output' else 'in '}  {text}"
+    if e['active']:
+        text += '  *'
+    return text
+
+
+def choose(lines):
+    menu = shlex.split(os.environ.get('DMENU', 'rofi -dmenu -i'))
+    proc = subprocess.run(menu, input='\n'.join(lines), capture_output=True, text=True)
+    if proc.returncode != 0:
+        return None
+    return proc.stdout.rstrip('\n') or None
+
+
+def pick_profile(e):
+    """Profile that contains the route, disturbing the other direction least."""
+    route = e['route']
+    profiles = e['profiles']
+    cur = profiles.get(e['cur_profile'], {})
+    cur_parts = profile_parts(cur.get('name', ''))
+    other = 'input' if route['direction'] == 'Output' else 'output'
+
+    candidates = [profiles[i] for i in route['profiles'] if i in profiles]
+    if not candidates:
+        return None
+    keep = [p for p in candidates
+            if profile_parts(p['name']).get(other) == cur_parts.get(other)]
+    return max(keep or candidates, key=lambda p: p['priority'])
+
+
+def wait_for(predicate, timeout=3.0):
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        value = predicate()
+        if value is not None:
+            return value
+        time.sleep(0.1)
+    return None
+
+
+def device_obj(dev_id):
+    return next((o for o in pw_dump() if o['id'] == dev_id), None)
+
+
+def apply(e, cls):
+    dev_id = e['device']
+    route = e['route']
+
+    if e['cur_profile'] not in route['profiles']:
+        profile = pick_profile(e)
+        if profile is None:
+            sys.exit(f"no profile provides route {route['name']}")
+        run('pw-cli', 'set-param', str(dev_id), 'Profile',
+            json.dumps({'index': profile['index'], 'save': True}))
+        dev = wait_for(lambda: (d := device_obj(dev_id)) and
+                       (params(d, 'Profile') or [{}])[0].get('index') == profile['index'] and d)
+        if dev is None:
+            sys.exit(f"profile {profile['name']} did not become active")
+        cur = profile
+    else:
+        cur = e['profiles'][e['cur_profile']]
+
+    devices = [d for d in profile_devices(cur).get(cls, []) if d in route['devices']]
+    if not devices:
+        sys.exit(f"route {route['name']} has no device in profile {cur['name']}")
+    card_device = devices[0]
+
+    run('pw-cli', 'set-param', str(dev_id), 'Route',
+        json.dumps({'index': route['index'], 'device': card_device,
+                    'props': {}, 'save': True}))
+
+    def find_node():
+        for o in pw_dump():
+            p = o.get('info', {}).get('props', {})
+            if (o.get('type') == 'PipeWire:Interface:Node'
+                    and p.get('device.id') == dev_id
+                    and p.get('card.profile.device') == card_device
+                    and p.get('media.class') == cls):
+                return o['id']
+        return None
+
+    node = wait_for(find_node)
+    if node is None:
+        sys.exit(f"node for {route['name']} did not appear")
+    run('wpctl', 'set-default', str(node))
+
+
+def main():
+    arg = sys.argv[1] if len(sys.argv) > 1 else 'all'
+    if arg not in ('sink', 'source', 'all'):
+        sys.exit("direction must be 'sink', 'source' or 'all'")
+    kinds = ['sink', 'source'] if arg == 'all' else [arg]
+    wanted = {DIRECTIONS[k][0] for k in kinds}
+
+    entries = collect(pw_dump(), wanted)
+    if not entries:
+        sys.exit('no routes found')
+
+    with_card = len({e['device'] for e in entries}) > 1
+    lines = []
+    for e in entries:
+        text = label(e, with_card, arg == 'all')
+        while text in lines:  # keep lines unique so the choice maps back unambiguously
+            text += ' '
+        lines.append(text)
+
+    selected = choose(lines)
+    if selected is None:
+        return
+    e = entries[lines.index(selected)]
+    cls = next(c for d, c in DIRECTIONS.values() if d == e['route']['direction'])
+    apply(e, cls)
+
+
+if __name__ == '__main__':
+    main()
